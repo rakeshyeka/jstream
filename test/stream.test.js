@@ -1,4 +1,4 @@
-import stream from '../dist/stream.bundle';
+import stream from '../src/stream';
 import {randomInt} from './testData';
 
 const arr = [...Array(randomInt(10)).keys()];
