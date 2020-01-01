@@ -1,13 +1,14 @@
 import stream from '../src/stream';
 import {randomInt} from './testData';
 
-const arr = [...Array(randomInt(10)).keys()];
+let arr = [...Array(randomInt(6, 15)).keys()];
+arr = arr.map(item => item+1);
 
 let streamer;
 beforeEach(() => {
     streamer = new stream(arr);
 });
-console.log(stream);
+
 describe('sanity: stream', () => {
     it('should filter array', () => {
         let filterCondition = item => item%2;
@@ -92,6 +93,6 @@ describe("perf: stream", () => {
             .every(item => item%2 == 1);
         expect(every).toBeFalsy();
         expect(count).not.toEqual(arr.length);
-        expect(count).toEqual(1);
+        expect(count).toEqual(2);
     });
 });

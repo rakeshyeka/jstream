@@ -1,5 +1,5 @@
 {
-  "name": "streamjavascript",
+  "name": "@rakeshyeka/jstream",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.7.7",
     "babel-loader": "^8.0.6",
     "jest": "^24.9.0",
@@ -24,5 +25,6 @@
     "collectCoverageFrom": [
       "src/**.js"
     ]
-  }
+  },
+  "repository": "git://github.com/rakeshyeka/jstream.git"
 }
