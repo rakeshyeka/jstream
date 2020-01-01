@@ -1,5 +1,4 @@
-const FILTER = 'filter';
-const MAP = 'map';
+import {chainRunnerFactory, FILTER, MAP} from './helper';
 export default class stream {
     constructor(arr) {
         this._arr = arr;
@@ -23,79 +22,44 @@ export default class stream {
         return this;
     }
 
-    executeAction(action, newItem) {
-        var runNextAction = true;
-        var resp = action.run(newItem);
-        if (action.type === FILTER && !resp) {
-            runNextAction = false;
-        } else if (action.type === MAP) {
-            newItem = resp;
+    collect = chainRunnerFactory(
+        () => true,
+        (isChainDone, newItem, fn, newArr) => {
+            newArr = newArr 
+                ? newArr 
+                : fn ? fn : [];
+            if (isChainDone) {
+                newArr.push(newItem);
+            }
+            return [newArr, newArr];
+        })
+    .bind(this);
+
+    reduce = chainRunnerFactory(
+        () => true,
+        (isChainDone, newItem, fn, aggregator) => {
+            if (isChainDone) {
+                aggregator = fn(aggregator, newItem);
+            }
+            return [aggregator, aggregator];
         }
+    )
+    .bind(this);
 
-        return [runNextAction, newItem];
-    }
+    find = chainRunnerFactory(
+        (isChainDone, newItem, fn) => {
+            let searchNextItem = true;
+            if (isChainDone && fn(newItem)) {
+                searchNextItem = false;
+            }
 
-    collect(newArr = []) {
-        this._arr
-            .forEach(newItem => {
-                var isChainDone = this._streamChain
-                    .every(action => {
-                        var [runNextAction, resp] = this.executeAction(action, newItem);
-                        newItem = resp;
-                        
-                        return runNextAction;
-                    });
-
-                if (isChainDone) {
-                    newArr.push(newItem);
-                }
-            });
-        return newArr;
-    }
-
-    reduce(fn, init) {
-        var aggregator = init;
-        this._arr
-            .forEach(newItem => {
-                var isChainDone = this._streamChain
-                    .every(action => {
-                        var [runNextAction, resp] = this.executeAction(action, newItem);
-                        newItem = resp;
-                        
-                        return runNextAction;
-                    });
-
-                if (isChainDone) {
-                    aggregator = fn(aggregator, newItem);
-                }
-            });
-
-        return aggregator;
-    }
-
-    find(fn) {
-        var returnItem = undefined;
-        this._arr
-            .every(newItem => {
-                var searchNextItem = true;
-                var isChainDone = this._streamChain
-                    .every(action => {
-                        var [runNextAction, resp] = this.executeAction(action, newItem);
-                        newItem = resp;
-                        
-                        return runNextAction;
-                    })
-                
-                if (isChainDone && fn(newItem)) {
-                    returnItem = newItem;
-                    searchNextItem = false;
-                }
-
-                return searchNextItem;
-            });
-        
-        return returnItem;
-    }
+            return searchNextItem;
+        },
+        (isChainDone, newItem, fn) => {
+            return isChainDone && fn(newItem) ? [newItem] : [];
+        }
+    )
+    .bind(this);
 
     every(fn) {
         return this.find(item => !fn(item)) === undefined;

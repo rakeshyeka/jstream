@@ -12,8 +12,8 @@ module.exports = (env) => {
         // Webpack will bundle all JavaScript into this file
         output: {
           path: path.resolve(__dirname, 'dist'),
-          filename: 'stream.bundle.js',
-          library: 'stream',
+          filename: 'jstream.bundle.js',
+          library: 'jstream',
           libraryTarget: 'commonjs-module'
         },
         module: {
