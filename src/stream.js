@@ -1,6 +1,8 @@
 import {chainRunnerFactory, FILTER, MAP} from './helper';
 export default class stream {
     constructor(arr) {
+        if (!Array.isArray(arr))
+            throw new TypeError("Invalid arguments, argument of type Array required");
         this._arr = arr;
         this._streamChain = [];
     }

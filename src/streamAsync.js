@@ -2,6 +2,8 @@ import { asyncChainRunnerFactory, FILTER, MAP } from "./helper";
 
 export default class streamAsync {
     constructor(arr) {
+        if (!Array.isArray(arr))
+            throw new TypeError("Invalid arguments, argument of type Array required");
         this._arr = arr;
         this._streamChain = [];
     }

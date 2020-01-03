@@ -10,6 +10,13 @@ beforeEach(() => {
 });
 
 describe('sanity: stream', () => {
+    it('should throw when not array', () => {
+        let t = () => {
+            stream(1);
+        }
+        expect(t).toThrow(TypeError);
+    });
+
     it('should filter array', () => {
         let filterCondition = item => item%2;
         let filteredArr = streamer

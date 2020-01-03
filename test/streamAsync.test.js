@@ -9,6 +9,13 @@ beforeEach(() => {
 });
 
 describe('sanity: streamAsync', () => {
+    it('should throw when not array', () => {
+        let t = () => {
+            streamAsync(1);
+        }
+        expect(t).toThrow(TypeError);
+    });
+
     it('should filter array', async () => {
         let filterPromiseCondition = item => new Promise(resolve => resolve(item%2));
         let filteredArr = await streamer
