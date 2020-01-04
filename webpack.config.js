@@ -6,7 +6,7 @@ const path = require('path');
 module.exports = (env) => {
     return {
         // Path to your entry point. From this file Webpack will begin his work
-        entry: './src/stream.js',
+        entry: './src/index.js',
       
         // Path and filename of your result bundle.
         // Webpack will bundle all JavaScript into this file
